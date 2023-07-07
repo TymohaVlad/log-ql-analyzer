@@ -1,0 +1,37 @@
+.analizator__section{
+    padding: 3%;
+}
+.analizator__title{
+    font-size: 35px;
+}
+.description__container{
+    max-width: 80%;
+    margin: 0 auto;
+}
+.analizator__description{
+    font-size: 24px;
+    line-height: 1.5;;
+}
+li{
+    list-style-type: none;
+}
+.query__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 80%;
+    margin: auto;
+  }
+  .form__list {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    font-size: 20px;
+  }
+  .share__btn{
+    width: 100px;
+    height: 40px;
+    background: #6767f0;
+    border-radius: 5px;
+    border: none;
+  }
