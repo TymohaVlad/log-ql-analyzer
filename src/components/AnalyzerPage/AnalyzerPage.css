@@ -29,9 +29,33 @@ li{
     font-size: 20px;
   }
   .share__btn{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 18px;
+    color: #fff;
+    font-weight: bold;
     width: 100px;
     height: 40px;
     background: #6767f0;
     border-radius: 5px;
     border: none;
+  }
+  .panel-header{
+    font-size: 24px;
+    margin: 2% ;
+  }
+  .textArea__container {
+    flex-shrink: 0;
+  }
+  .source__input{
+    border: 1px solid #a0a0a0;
+    height: auto;
+    resize: vertical;
+    min-height: 250px;
+    min-width: 100%;
+    font-size: 20px;
+    background: #ccc;
+    padding: 16px;
+    line-height: 1.5;
   }
