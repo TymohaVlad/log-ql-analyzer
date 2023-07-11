@@ -16,7 +16,7 @@ li{
     list-style-type: none;
 }
 .panel-container{
-    border: solid 1px #000000;
+    border: solid 1px #ccc;
     padding-top: 2%;
     padding-bottom: 2%;
 }
@@ -63,7 +63,7 @@ li{
   .source__input{
     display: block;
     margin: 1% auto;
-    border: 1px solid #d4d2d2;
+    border: 1px solid #ccc;
     height: auto;
     resize: vertical;
     min-height: 250px;
@@ -73,12 +73,11 @@ li{
     padding: 16px;
     line-height: 1.5;
     outline: none;
-    box-shadow: 0px 1px 3px 3px rgba(0,0,0,0.75);
+    box-shadow: 0px 1px 3px 3px rgba(0,0,0,0.20);
   }
  .query{
-  width: 90%;
   min-height: 100%;
-  margin: auto;
+  margin: 1% auto;
  }
  .query__box{
     display: flex;
@@ -87,7 +86,7 @@ li{
  .input__box{
   display:flex;
   padding: 8px;
-  border: solid 1px;
+  border: solid 1px #ccc;
   width: 80%;
  }
  .query__input{
@@ -103,8 +102,8 @@ li{
  }
  .primary__button{
   background: #3871dc;
-  width: 150px;
-  height: 50px;
+  width: 100px;
+  height: 40px;
   padding: 0 8px;
   font-weight: bold;
   font-size: 100%;

@@ -1,9 +1,34 @@
 import React from 'react';
-import { useState } from 'react';
-import './AnalyzerPage.css';
+import {useState, ChangeEvent} from 'react'
 
-export default function AnalyzerQuery() {
-  const [defaultValue, setDefaultValue] = useState('| logfmt | level = "info"');
+import { LOG_FORMAT_EXAMPLE_LOG, JSON_PARSER_EXAMPLE_LOG, PATTERN_PARSER_EXAMPLE_LOG } from '../AnalyzeQuery/Variables'
+import { LOG_FORMAT_EXAMPLE_QUERY, JSON_PARSER_EXAMPLE_QUERY, PATTERN_PARSER_EXAMPLE_QUERY } from '../AnalyzeQuery/Variables';
+
+import AnalyzerQuery from '../AnalyzeQuery/AnalyzerQuery';
+
+export default function LogsSource() {
+
+const [logFormat, setLogFormat] = useState<string>('logfmt');
+const [queryFormat, setQueryFormat] = useState<string>(LOG_FORMAT_EXAMPLE_QUERY)
+
+const handleChangeFormat = (event: ChangeEvent<HTMLInputElement>): void => {
+    setLogFormat(event.target.value);
+    setQueryFormat(event.target.value)
+}
+
+let selectedLogs = '';
+let queryInputFormat = ''
+
+if(logFormat === 'logfmt'){
+    selectedLogs = LOG_FORMAT_EXAMPLE_LOG 
+    queryInputFormat = LOG_FORMAT_EXAMPLE_QUERY
+}else if(logFormat === 'JSON'){
+    selectedLogs = JSON_PARSER_EXAMPLE_LOG;
+    queryInputFormat = JSON_PARSER_EXAMPLE_QUERY
+}else if( logFormat === 'unstructured_text'){
+    selectedLogs = PATTERN_PARSER_EXAMPLE_LOG;
+    queryInputFormat = PATTERN_PARSER_EXAMPLE_QUERY
+}
 
   return (
     <section className="logs-source panel-container">
@@ -16,6 +41,8 @@ export default function AnalyzerQuery() {
             className="logfmt radio"
             type="radio"
             value="logfmt"
+            checked={logFormat === 'logfmt'}
+            onChange={handleChangeFormat}
             name="logFormat"
             id="logfmt"
           />
@@ -25,6 +52,8 @@ export default function AnalyzerQuery() {
             className="lson radio"
             type="radio"
             value="JSON"
+            checked={logFormat === 'JSON'}
+            onChange={handleChangeFormat}
             name="logFormat"
             id="json"
           />
@@ -34,6 +63,8 @@ export default function AnalyzerQuery() {
             className="unstructured radio"
             type="radio"
             value="unstructured_text"
+            checked={logFormat === 'unstructured_text'}
+            onChange={handleChangeFormat}
             name="logFormat"
             id="unstructured"
           />
@@ -56,7 +87,6 @@ export default function AnalyzerQuery() {
           Share
         </button>
       </div>
-
       <div className="textArea__container">
         <p className="panel__header">
           <b>{'{job="analyze"}'}</b>
@@ -65,6 +95,8 @@ export default function AnalyzerQuery() {
           className="source__input"
           name="logs-source__input"
           id="logs-source-input"
+          value={selectedLogs}
+          readOnly
         ></textarea>
       </div>
       <section className="query panel-container">
@@ -76,10 +108,10 @@ export default function AnalyzerQuery() {
             <span className="prefix">{`{job="analyze"}`}</span>
             <input
               className="query__input"
-              value={defaultValue}
+              onChange={handleChangeFormat}
+              value={queryInputFormat}
               type="text"
               id="query__input"
-              onChange={(e) => setDefaultValue(e.target.value)}
             />
           </div>
           <button className="query__submit primary__button">Run query</button>

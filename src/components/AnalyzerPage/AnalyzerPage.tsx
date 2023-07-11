@@ -1,11 +1,12 @@
 import React from 'react';
-import AnalyzerQuery from './AnalyzerQuery';
+import AnalyzerQuery from './AnalyzeQuery/AnalyzerQuery';
+import LogsSource from './LogsSourse/LogsSource';
 import './AnalyzerPage.css';
 
 
 export default function AnalyzerPage() {
   return (
-    <section className="analizator__section">
+    <main className="analizator__section">
       <div className="description__container">
         <h1 className="analizator__title">LogQL Analyzer</h1>
         <p className="analizator__description">
@@ -35,8 +36,9 @@ export default function AnalyzerPage() {
           Clicking on a line in the results pane expands the details, showing
           why the line is or is not included in the query result set.
         </p>
+      <LogsSource/>
       <AnalyzerQuery/>
       </div>
-    </section>
+    </main>
   );
 }
