@@ -1,21 +1,37 @@
 import React from 'react';
+import { useState } from 'react';
 import './AnalyzerPage.css';
 
 export default function AnalyzerQuery() {
+  const [defaultValue, setDefaultValue] = useState('| logfmt | level = "info"');
+
   return (
-    <section className='logs-source panel-container'>
+    <section className="logs-source panel-container">
       <div className="query__container">
         <div className="form__list">
           <span className="input__item">
             <b>Log line format:</b>
           </span>
-          <input className="logfmt" type="radio" value="logfmt" name="logFormat" id="logfmt" />
+          <input
+            className="logfmt radio"
+            type="radio"
+            value="logfmt"
+            name="logFormat"
+            id="logfmt"
+          />
           <label htmlFor="logfmt">logfmt</label>
 
-          <input className='lson' type="radio" value="JSON" name="logFormat" id="json" />
+          <input
+            className="lson radio"
+            type="radio"
+            value="JSON"
+            name="logFormat"
+            id="json"
+          />
           <label htmlFor="json">JSON</label>
 
-          <input className='unstructured'
+          <input
+            className="unstructured radio"
             type="radio"
             value="unstructured_text"
             name="logFormat"
@@ -41,10 +57,34 @@ export default function AnalyzerQuery() {
         </button>
       </div>
 
-        <div className="textArea__container">
-          <p className='panel-header'><b>{'{job="analyze"}'}</b></p>
-          <textarea className="source__input" name="logs-source__input" id="logs-source-input" ></textarea>
+      <div className="textArea__container">
+        <p className="panel__header">
+          <b>{'{job="analyze"}'}</b>
+        </p>
+        <textarea
+          className="source__input"
+          name="logs-source__input"
+          id="logs-source-input"
+        ></textarea>
+      </div>
+      <section className="query panel-container">
+        <span className="panel__header">
+          <b>Query</b>
+        </span>
+        <div className="query__box">
+          <div className="input__box">
+            <span className="prefix">{`{job="analyze"}`}</span>
+            <input
+              className="query__input"
+              value={defaultValue}
+              type="text"
+              id="query__input"
+              onChange={(e) => setDefaultValue(e.target.value)}
+            />
+          </div>
+          <button className="query__submit primary__button">Run query</button>
         </div>
+      </section>
     </section>
   );
 }
