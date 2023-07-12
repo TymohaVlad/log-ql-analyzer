@@ -1,34 +1,44 @@
 import React from 'react';
-import {useState, ChangeEvent} from 'react'
-
-import { LOG_FORMAT_EXAMPLE_LOG, JSON_PARSER_EXAMPLE_LOG, PATTERN_PARSER_EXAMPLE_LOG } from '../AnalyzeQuery/Variables'
-import { LOG_FORMAT_EXAMPLE_QUERY, JSON_PARSER_EXAMPLE_QUERY, PATTERN_PARSER_EXAMPLE_QUERY } from '../AnalyzeQuery/Variables';
-
-import AnalyzerQuery from '../AnalyzeQuery/AnalyzerQuery';
+import { ChangeEvent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
+import { setLogFormat } from '../../../store/redusers/logsFotmatSlise';
+import { setQuery } from '../../../store/redusers/QuerySlice';
+import {
+  LOG_FORMAT_EXAMPLE_LOG,
+  JSON_PARSER_EXAMPLE_LOG,
+  PATTERN_PARSER_EXAMPLE_LOG,
+} from '../AnalyzeQuery/Variables';
+import {
+  LOG_FORMAT_EXAMPLE_QUERY,
+  JSON_PARSER_EXAMPLE_QUERY,
+  PATTERN_PARSER_EXAMPLE_QUERY,
+} from '../AnalyzeQuery/Variables';
 
 export default function LogsSource() {
+  const dispatch = useDispatch();
+  const logFormat = useSelector(
+    (state: RootState) => state.logsFormat.logsFormat
+  );
 
-const [logFormat, setLogFormat] = useState<string>('logfmt');
-const [queryFormat, setQueryFormat] = useState<string>(LOG_FORMAT_EXAMPLE_QUERY)
+  const handleChangeFormat = (event: ChangeEvent<HTMLInputElement>): void => {
+    const format = event.target.value;
+    setLogFormat(format);
+    dispatch(setLogFormat(format));
+  };
 
-const handleChangeFormat = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLogFormat(event.target.value);
-    setQueryFormat(event.target.value)
-}
+  let selectedLogs = '';
 
-let selectedLogs = '';
-let queryInputFormat = ''
-
-if(logFormat === 'logfmt'){
-    selectedLogs = LOG_FORMAT_EXAMPLE_LOG 
-    queryInputFormat = LOG_FORMAT_EXAMPLE_QUERY
-}else if(logFormat === 'JSON'){
+  if (logFormat === 'logfmt') {
+    selectedLogs = LOG_FORMAT_EXAMPLE_LOG;
+    dispatch(setQuery(LOG_FORMAT_EXAMPLE_QUERY));
+  } else if (logFormat === 'JSON') {
     selectedLogs = JSON_PARSER_EXAMPLE_LOG;
-    queryInputFormat = JSON_PARSER_EXAMPLE_QUERY
-}else if( logFormat === 'unstructured_text'){
+    dispatch(setQuery(JSON_PARSER_EXAMPLE_QUERY));
+  } else if (logFormat === 'unstructured_text') {
     selectedLogs = PATTERN_PARSER_EXAMPLE_LOG;
-    queryInputFormat = PATTERN_PARSER_EXAMPLE_QUERY
-}
+    dispatch(setQuery(PATTERN_PARSER_EXAMPLE_QUERY));
+  }
 
   return (
     <section className="logs-source panel-container">
@@ -99,24 +109,6 @@ if(logFormat === 'logfmt'){
           readOnly
         ></textarea>
       </div>
-      <section className="query panel-container">
-        <span className="panel__header">
-          <b>Query</b>
-        </span>
-        <div className="query__box">
-          <div className="input__box">
-            <span className="prefix">{`{job="analyze"}`}</span>
-            <input
-              className="query__input"
-              onChange={handleChangeFormat}
-              value={queryInputFormat}
-              type="text"
-              id="query__input"
-            />
-          </div>
-          <button className="query__submit primary__button">Run query</button>
-        </div>
-      </section>
     </section>
   );
 }
