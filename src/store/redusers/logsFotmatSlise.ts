@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface logsFormatState{
     logsFormat: string
+    logs: string
 }
 
 const initialState: logsFormatState = {
     logsFormat: 'logfmt',
+    logs: ''
 }
 
 const logsFormatSlice = createSlice({
@@ -14,8 +16,11 @@ const logsFormatSlice = createSlice({
     setLogFormat: (state, action: PayloadAction<string>) => {
       state.logsFormat = action.payload;
     },
+    setLogs:(state,action: PayloadAction<string>) => {
+      state.logs = action.payload
+    }
   },
 });
 
-export const { setLogFormat } = logsFormatSlice.actions;
+export const { setLogFormat, setLogs } = logsFormatSlice.actions;
 export default logsFormatSlice.reducer;

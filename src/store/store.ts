@@ -6,6 +6,7 @@ import querySlice from './redusers/QuerySlice';
 const rootRedusers = combineReducers({
     logsFormat: logsFormatSlice,
     query: querySlice,
+    logs: logsFormatSlice
 })
 
 export const store = configureStore({

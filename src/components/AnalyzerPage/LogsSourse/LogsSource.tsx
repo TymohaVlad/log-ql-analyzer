@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { setLogFormat } from '../../../store/redusers/logsFotmatSlise';
 import { setQuery } from '../../../store/redusers/QuerySlice';
+import { setLogs } from '../../../store/redusers/logsFotmatSlise';
 import {
   LOG_FORMAT_EXAMPLE_LOG,
   JSON_PARSER_EXAMPLE_LOG,
@@ -31,12 +32,15 @@ export default function LogsSource() {
 
   if (logFormat === 'logfmt') {
     selectedLogs = LOG_FORMAT_EXAMPLE_LOG;
+    dispatch(setLogs(LOG_FORMAT_EXAMPLE_LOG))
     dispatch(setQuery(LOG_FORMAT_EXAMPLE_QUERY));
   } else if (logFormat === 'JSON') {
     selectedLogs = JSON_PARSER_EXAMPLE_LOG;
+    dispatch(setLogs(JSON_PARSER_EXAMPLE_LOG))
     dispatch(setQuery(JSON_PARSER_EXAMPLE_QUERY));
   } else if (logFormat === 'unstructured_text') {
     selectedLogs = PATTERN_PARSER_EXAMPLE_LOG;
+    dispatch(setLogs(PATTERN_PARSER_EXAMPLE_LOG))
     dispatch(setQuery(PATTERN_PARSER_EXAMPLE_QUERY));
   }
 
