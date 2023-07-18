@@ -1,5 +1,4 @@
-import React from 'react';
-import { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { setLogFormat } from '../../../store/redusers/logsFotmatSlise';
@@ -15,12 +14,40 @@ import {
   JSON_PARSER_EXAMPLE_QUERY,
   PATTERN_PARSER_EXAMPLE_QUERY,
 } from '../AnalyzeQuery/Variables';
+import { FiCheckCircle } from 'react-icons/fi';
+
+type LogFormatTemplates = {
+  [key: string]: {
+    logs: string;
+    query: string;
+  };
+};
 
 export default function LogsSource() {
   const dispatch = useDispatch();
   const logFormat = useSelector(
     (state: RootState) => state.logsFormat.logsFormat
   );
+  const [copySuccess, setcopySuccess] = useState<boolean>(false);
+
+  const [templates] = useState<LogFormatTemplates>({
+    logfmt: {
+      logs: LOG_FORMAT_EXAMPLE_LOG,
+      query: LOG_FORMAT_EXAMPLE_QUERY,
+    },
+    JSON: {
+      logs: JSON_PARSER_EXAMPLE_LOG,
+      query: JSON_PARSER_EXAMPLE_QUERY,
+    },
+    unstructured_text: {
+      logs: PATTERN_PARSER_EXAMPLE_LOG,
+      query: PATTERN_PARSER_EXAMPLE_QUERY,
+    },
+  });
+  const [textAreaLogs, setTextAreaLogs] = useState('');
+  useEffect(() => {
+    setTextAreaLogs(templates[logFormat].logs)
+  }, [logFormat, templates]);
 
   const handleChangeFormat = (event: ChangeEvent<HTMLInputElement>): void => {
     const format = event.target.value;
@@ -28,22 +55,20 @@ export default function LogsSource() {
     dispatch(setLogFormat(format));
   };
 
-  let selectedLogs = '';
+  const selectedLogs = templates[logFormat].logs;
+  dispatch(setQuery(templates[logFormat].query));
+  dispatch(setLogs(templates[logFormat].logs));
 
-  if (logFormat === 'logfmt') {
-    selectedLogs = LOG_FORMAT_EXAMPLE_LOG;
-    dispatch(setLogs(LOG_FORMAT_EXAMPLE_LOG))
-    dispatch(setQuery(LOG_FORMAT_EXAMPLE_QUERY));
-  } else if (logFormat === 'JSON') {
-    selectedLogs = JSON_PARSER_EXAMPLE_LOG;
-    dispatch(setLogs(JSON_PARSER_EXAMPLE_LOG))
-    dispatch(setQuery(JSON_PARSER_EXAMPLE_QUERY));
-  } else if (logFormat === 'unstructured_text') {
-    selectedLogs = PATTERN_PARSER_EXAMPLE_LOG;
-    dispatch(setLogs(PATTERN_PARSER_EXAMPLE_LOG))
-    dispatch(setQuery(PATTERN_PARSER_EXAMPLE_QUERY));
+  async function handleClickShare() {
+    let currentUrl = window.location.href;
+    currentUrl += encodeURIComponent(selectedLogs);
+    await navigator.clipboard.writeText(currentUrl);
+    setcopySuccess(true);
+
+    setTimeout(() => {
+      setcopySuccess(false);
+    }, 2000);
   }
-
   return (
     <section className="logs-source panel-container">
       <div className="query__container">
@@ -51,41 +76,29 @@ export default function LogsSource() {
           <span className="input__item">
             <b>Log line format:</b>
           </span>
-          <input
-            className="logfmt radio"
-            type="radio"
-            value="logfmt"
-            checked={logFormat === 'logfmt'}
-            onChange={handleChangeFormat}
-            name="logFormat"
-            id="logfmt"
-          />
-          <label htmlFor="logfmt">logfmt</label>
-
-          <input
-            className="lson radio"
-            type="radio"
-            value="JSON"
-            checked={logFormat === 'JSON'}
-            onChange={handleChangeFormat}
-            name="logFormat"
-            id="json"
-          />
-          <label htmlFor="json">JSON</label>
-
-          <input
-            className="unstructured radio"
-            type="radio"
-            value="unstructured_text"
-            checked={logFormat === 'unstructured_text'}
-            onChange={handleChangeFormat}
-            name="logFormat"
-            id="unstructured"
-          />
-          <label htmlFor="unstructured">Unstructured text</label>
+          {Object.keys(templates).map((format) => (
+            <React.Fragment key={format}>
+              <input
+                className={`${format} radio`}
+                type="radio"
+                value={format}
+                checked={logFormat === format}
+                onChange={handleChangeFormat}
+                name="logFormat"
+                id={format}
+              />
+              <label htmlFor={format}>{format}</label>
+            </React.Fragment>
+          ))}
         </div>
-
-        <button className="share__btn">
+        <span className="copy__link-message">
+          {copySuccess && (
+            <>
+              Link copied to clipboard <FiCheckCircle />
+            </>
+          )}
+        </span>
+        <button className="share__btn" onClick={handleClickShare}>
           <svg
             className="share__svg"
             viewBox="0 0 16 16"
@@ -109,8 +122,8 @@ export default function LogsSource() {
           className="source__input"
           name="logs-source__input"
           id="logs-source-input"
-          value={selectedLogs}
-          readOnly
+          value={textAreaLogs}
+          onChange={(e) => setTextAreaLogs(e.target.value)}
         ></textarea>
       </div>
     </section>

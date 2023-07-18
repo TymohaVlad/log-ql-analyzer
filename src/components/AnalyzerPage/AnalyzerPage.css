@@ -114,3 +114,7 @@ li{
  .primary__button:hover{
   color: #000000;
  }
+ .copy__link-message{
+  color: #09b309;
+  font-size: 22px;
+ }

@@ -1,10 +1,16 @@
-import React from 'react';
-import {  useSelector } from 'react-redux';
+import React, {ChangeEvent} from 'react';
+import {  useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
+import { setQuery } from '../../../store/redusers/QuerySlice';
 
 export default function AnalyzerQuery() {
   const query = useSelector((state: RootState) => state.query.query);
+  const dispatch = useDispatch()
 
+  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newQuery = event.target.value;
+    dispatch(setQuery(newQuery));
+  };
 
   return (
     <section className="query panel-container">
@@ -19,6 +25,7 @@ export default function AnalyzerQuery() {
             type="text"
             id="query__input"
             value={query}
+            onChange={handleQueryChange}
           />
         </div>
         <button className="query__submit primary__button">Run query</button>
