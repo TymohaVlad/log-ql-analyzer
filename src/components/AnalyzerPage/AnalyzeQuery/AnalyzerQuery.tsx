@@ -1,15 +1,37 @@
-import React, {ChangeEvent} from 'react';
-import {  useDispatch, useSelector } from 'react-redux';
+import React, { ChangeEvent, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { setQuery } from '../../../store/redusers/QuerySlice';
 
 export default function AnalyzerQuery() {
-  const query = useSelector((state: RootState) => state.query.query);
-  const dispatch = useDispatch()
+  const queryState = useSelector((state: RootState) => state.query.query);
+  
+  const logsSate = useSelector((state: RootState) => state.logsFormat.logs);
+
+  const dispatch = useDispatch();
+  const [sendRequest, setSendRequest] = useState([]);
+
+  let logArray = logsSate.split('\n').filter(Boolean);
+  const prefix = '{job="analyze"}';
+  let query = `${prefix}${queryState}`;
 
   const handleQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newQuery = event.target.value;
     dispatch(setQuery(newQuery));
+  };
+  
+  const handleQuerySubmit = () => {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ logs: logArray, query }),
+    };
+    fetch(
+      'https://logql-analyzer.grafana.net/next/api/logql-analyze',
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((data) => setSendRequest(data));
   };
 
   return (
@@ -24,11 +46,16 @@ export default function AnalyzerQuery() {
             className="query__input"
             type="text"
             id="query__input"
-            value={query}
+            value={queryState}
             onChange={handleQueryChange}
           />
         </div>
-        <button className="query__submit primary__button">Run query</button>
+        <button
+          className="query__submit primary__button"
+          onClick={handleQuerySubmit}
+        >
+          Run query
+        </button>
       </div>
     </section>
   );

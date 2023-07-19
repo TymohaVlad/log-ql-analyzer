@@ -34,5 +34,4 @@ export const LOG_FORMAT_EXAMPLE_QUERY = `\
 export const JSON_PARSER_EXAMPLE_QUERY = `\
 | json | level="INFO" | line_format "{{.message}}"`
 
-export const PATTERN_PARSER_EXAMPLE_QUERY = `\
-| pattern "<_> - <_> <_> \"<method> <url> <protocol>\" <status> <_> <_> \"<_>\" <_>" | status >= 200 and status < 300`
+export const PATTERN_PARSER_EXAMPLE_QUERY = "| pattern \"<_> - <_> <_> \\\"<method> <url> <protocol>\\\" <status> <_> <_> \\\"<_>\\\" <_>\" | status >= 200 and status < 300"
