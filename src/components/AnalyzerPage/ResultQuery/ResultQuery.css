@@ -1,0 +1,26 @@
+.result__section{
+    border: solid 1px #24292e1f;
+}
+.result__container{
+    padding: 1%;
+    background: #24292e1f;
+}
+.result__details{
+    margin-bottom: 2%;
+}
+.origin__line{
+    font-size: 22px;
+}
+.stage-expression{
+    color: #0000ff;
+}
+.filtered{
+    text-decoration: line-through;
+    color: #ccc;
+}
+details {
+    max-width: 100%; /* Измените значение на то, которое вам нужно */
+    overflow-y: auto; /* Добавьте вертикальную прокрутку, если контент превышает максимальную высоту */
+    word-wrap: break-word;
+  }
+

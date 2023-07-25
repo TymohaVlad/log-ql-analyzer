@@ -2,6 +2,7 @@ import React from 'react';
 import AnalyzerQuery from './AnalyzeQuery/AnalyzerQuery';
 import LogsSource from './LogsSourse/LogsSource';
 import './AnalyzerPage.css';
+import RresultQuery from './ResultQuery/RresultQuery';
 
 
 export default function AnalyzerPage() {
@@ -38,6 +39,7 @@ export default function AnalyzerPage() {
         </p>
       <LogsSource/>
       <AnalyzerQuery/>
+      <RresultQuery/>
       </div>
     </main>
   );

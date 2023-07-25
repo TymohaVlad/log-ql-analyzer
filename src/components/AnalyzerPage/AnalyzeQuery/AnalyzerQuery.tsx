@@ -2,16 +2,13 @@ import React, { ChangeEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { setQuery } from '../../../store/redusers/QuerySlice';
+import { setResultQuery } from '../../../store/redusers/ResultQuerySlise';
 
 export default function AnalyzerQuery() {
   const queryState = useSelector((state: RootState) => state.query.query);
-  
   const logsSate = useSelector((state: RootState) => state.logsFormat.logs);
-
   const dispatch = useDispatch();
-  const [sendRequest, setSendRequest] = useState([]);
 
-  let logArray = logsSate.split('\n').filter(Boolean);
   const prefix = '{job="analyze"}';
   let query = `${prefix}${queryState}`;
 
@@ -19,8 +16,9 @@ export default function AnalyzerQuery() {
     const newQuery = event.target.value;
     dispatch(setQuery(newQuery));
   };
-  
+
   const handleQuerySubmit = () => {
+    const logArray = logsSate.split('\n').filter(Boolean);
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -31,7 +29,9 @@ export default function AnalyzerQuery() {
       requestOptions
     )
       .then((response) => response.json())
-      .then((data) => setSendRequest(data));
+      .then((data) => {
+        dispatch(setResultQuery(data));
+      });
   };
 
   return (

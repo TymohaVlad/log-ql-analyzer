@@ -2,17 +2,20 @@ import { configureStore } from '@reduxjs/toolkit'
 import { combineReducers } from '@reduxjs/toolkit';
 import logsFormatSlice from './redusers/logsFotmatSlise'
 import querySlice from './redusers/QuerySlice';
+import ResultQuerySlise from './redusers/ResultQuerySlise';
 
 const rootRedusers = combineReducers({
     logsFormat: logsFormatSlice,
     query: querySlice,
-    logs: logsFormatSlice
+    logs: logsFormatSlice,
+    results: ResultQuerySlise
 })
 
 export const store = configureStore({
   reducer: {
     logsFormat: logsFormatSlice,
     query: querySlice,
+    results: ResultQuerySlise
   },
 })
 
