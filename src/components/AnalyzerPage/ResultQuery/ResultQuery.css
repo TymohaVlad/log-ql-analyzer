@@ -1,26 +1,55 @@
-.result__section{
-    border: solid 1px #24292e1f;
+.filtered {
+  text-decoration: line-through;
 }
-.result__container{
-    padding: 1%;
-    background: #24292e1f;
+.result__container {
+  border: solid 1px #ccc;
+  padding: 15px;
+  background: #f9f9fa;
+  font-size: 18px;
 }
-.result__details{
-    margin-bottom: 2%;
-}
-.origin__line{
-    font-size: 22px;
-}
-.stage-expression{
-    color: #0000ff;
-}
-.filtered{
-    text-decoration: line-through;
-    color: #ccc;
-}
+
 details {
-    max-width: 100%; /* Измените значение на то, которое вам нужно */
-    overflow-y: auto; /* Добавьте вертикальную прокрутку, если контент превышает максимальную высоту */
-    word-wrap: break-word;
-  }
+  max-width: 100%;
+  overflow-y: auto;
+  word-wrap: break-word;
+}
+summary {
+  margin-bottom: 2%;
+}
+.line__after{
+
+}
+.origin__line-header{
+  border-bottom: solid 1px #ccc;
+  font-weight: 600;
+}
+.explain__stage,.origin-line,.result__section{
+  border: solid 1px #ccc;
+  padding: 6px;
+  margin-top: 3%;
+  margin-bottom: 2%;
+  background: #f4f5f5;
+}
+.stage-expression {
+  color: #0000ff;
+}
+.explain-section__header {
+  border-bottom: solid 1px #ccc;
+  font-weight: 600;
+}
+.explain-section__row-title {
+  font-weight: bold;
+}
+.explain-section__row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  max-width: 90%;
+  margin: auto;
+}
+.explain-section__row-body {
+ 
+  font-weight: 500;
+  overflow: hidden;
+}
 
