@@ -16,14 +16,13 @@ details {
 summary {
   margin-bottom: 2%;
 }
-.line__after{
 
-}
-.origin__line-header{
-  border-bottom: solid 1px #ccc;
+.origin__line-header {
   font-weight: 600;
 }
-.explain__stage,.origin-line,.result__section{
+.explain__stage,
+.origin-line,
+.result__section {
   border: solid 1px #ccc;
   padding: 6px;
   margin-top: 3%;
@@ -34,7 +33,6 @@ summary {
   color: #0000ff;
 }
 .explain-section__header {
-  border-bottom: solid 1px #ccc;
   font-weight: 600;
 }
 .explain-section__row-title {
@@ -48,8 +46,14 @@ summary {
   margin: auto;
 }
 .explain-section__row-body {
- 
   font-weight: 500;
   overflow: hidden;
 }
-
+.filtred__title{
+  color: red;
+  font-weight: 600;
+}
+.arrow{
+  background: #ffffff;
+  width: 100%;
+}

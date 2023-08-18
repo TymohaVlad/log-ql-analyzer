@@ -39,6 +39,7 @@ const RresultQuery: React.FC = () => {
                         Original log line{' '}
                         <span className="stage-expression">{`{job="analyze"}`}</span>
                       </p>
+                      <hr />
                       <p className="origin__line">{result.origin_line}</p>
                     </div>
                     <ResultStages
