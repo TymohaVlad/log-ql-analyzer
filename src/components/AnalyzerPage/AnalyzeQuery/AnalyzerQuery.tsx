@@ -1,17 +1,17 @@
-import React, { ChangeEvent, useEffect } from 'react';
+import React, { ChangeEvent} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { setQuery } from '../../../store/redusers/QuerySlice';
 import { setResultQuery } from '../../../store/redusers/ResultQuerySlise';
-import { ResultQueryState, QueryTypes } from '../../../store/redusers/ResultQuerySlise';
+import { ResultQueryState } from '../../../store/redusers/ResultQuerySlise';
 
-import ApiClient from '../../../ApiClient';
+import ApiClient from '../../../utils/ApiClient';
 
 
 
 export default function AnalyzerQuery() {
   const queryState = useSelector((state: RootState) => state.query.query);
-  const logsSate = useSelector((state: RootState) => state.logsFormat.logs);
+  const logsState = useSelector((state: RootState) => state.logsFormat.logs);
   const dispatch = useDispatch();
 
   const prefix = '{job="analyze"}';
@@ -25,7 +25,7 @@ export default function AnalyzerQuery() {
 const apiClient = new ApiClient()
 const handleQuerySubmit = async () => {
   try {
-    const response: ResultQueryState['response'] = await apiClient.executeQuery(logsSate, query);
+    const response: ResultQueryState['response'] = await apiClient.executeQuery(logsState, query);
     dispatch(setResultQuery(response)); 
   } catch (error) {
     console.error('An error occurred:', error);

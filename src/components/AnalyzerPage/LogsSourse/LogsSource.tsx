@@ -15,6 +15,9 @@ import {
   PATTERN_PARSER_EXAMPLE_QUERY,
 } from '../AnalyzeQuery/Variables';
 import { FiCheckCircle } from 'react-icons/fi';
+import ApiClient from '../../../utils/ApiClient';
+import { setResultQuery } from '../../../store/redusers/ResultQuerySlise';
+import { ResultQueryState } from '../../../store/redusers/ResultQuerySlise';
 
 type LogFormatTemplates = {
   [key: string]: {
@@ -46,18 +49,38 @@ export default function LogsSource() {
   });
   const [textAreaLogs, setTextAreaLogs] = useState('');
   useEffect(() => {
-    setTextAreaLogs(templates[logFormat].logs)
+    setTextAreaLogs(templates[logFormat].logs);
+    dispatch(setQuery(templates[logFormat].query));
+    dispatch(setLogs(templates[logFormat].logs));
   }, [logFormat, templates]);
 
-  const handleChangeFormat = (event: ChangeEvent<HTMLInputElement>): void => {
+
+
+  const apiClient = new ApiClient()
+
+  const handleChangeFormat = async (event: ChangeEvent<HTMLInputElement>) => {
     const format = event.target.value;
     setLogFormat(format);
     dispatch(setLogFormat(format));
+    
+    const logs = templates[format].logs;
+    const query = templates[format].query;
+  
+    try {
+      await dispatch(setLogs(logs));
+      await dispatch(setQuery(query));
+      
+      const prefix = '{job="analyze"}';
+      const newQuery = `${prefix}${query}`;
+      const response: ResultQueryState['response'] = await apiClient.executeQuery(logs, newQuery);
+      dispatch(setResultQuery(response));
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
   };
+  
 
   const selectedLogs = templates[logFormat].logs;
-  dispatch(setQuery(templates[logFormat].query));
-  dispatch(setLogs(templates[logFormat].logs));
 
   async function handleClickShare() {
     let currentUrl = window.location.href;

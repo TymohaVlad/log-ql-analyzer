@@ -1,4 +1,4 @@
-import { ResultQueryState } from "./store/redusers/ResultQuerySlise";
+import { ResultQueryState } from "../store/redusers/ResultQuerySlise";
 class ApiClient {
   host: string = 'https://logql-analyzer.grafana.net/next/api/logql-analyze';
 
