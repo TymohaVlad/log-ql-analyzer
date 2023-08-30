@@ -14,7 +14,7 @@ const stringToColor = (str: string) => {
   }
 
   const color = Math.floor(Math.abs((Math.sin(hash) * 10000) % 360));
-  return `hsl(${color}, 90%, 80%)`;
+  return `hsl(${color}, 90%, 90%)`;
 };
 
 function ExplainStages(props: lables) {
@@ -33,7 +33,7 @@ function ExplainStages(props: lables) {
       backgroundColor: labelColor,
     };
     return (
-      <article style={labelStyle} className=" label">
+      <article key={index} style={labelStyle} className=" label">
         {el.name} = {el.value}
       </article>
     );
@@ -44,7 +44,7 @@ function ExplainStages(props: lables) {
       backgroundColor: labelColor,
     };
     return (
-      <article style={labelStyle} className=" label">
+      <article key={index} style={labelStyle} className=" label">
         {el.name} = {el.value}
       </article>
     );

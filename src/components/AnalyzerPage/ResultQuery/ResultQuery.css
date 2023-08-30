@@ -6,6 +6,7 @@
   padding: 15px;
   background: #f9f9fa;
   font-size: 18px;
+  color: #454554;
 }
 
 details {
@@ -20,7 +21,11 @@ summary {
 .origin__line-header {
   font-weight: 600;
 }
-.explain__stage,
+.explain-section__body{
+  border: solid 1px #ccc;
+  padding: 10px;
+  background: #f4f5f5;
+}
 .origin-line,
 .result__section {
   border: solid 1px #ccc;
