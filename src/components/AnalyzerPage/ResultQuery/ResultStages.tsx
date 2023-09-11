@@ -34,12 +34,9 @@ function ResultStages({ stage_records, stages }: ResultStagesProps) {
               filtred_out={stage__before.filtered_out}
             />
           </div>
-          < FaArrowDown className='arrow'/>
+          {index !== stages.length - 1 && <FaArrowDown className='arrow' />}
         </div>
         ))}
-        <>
-        
-        </>
     </div>
   );
 }
