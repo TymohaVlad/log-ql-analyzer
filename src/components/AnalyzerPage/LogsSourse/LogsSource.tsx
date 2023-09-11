@@ -49,42 +49,97 @@ export default function LogsSource() {
   });
   const [textAreaLogs, setTextAreaLogs] = useState('');
   useEffect(() => {
-    setTextAreaLogs(templates[logFormat].logs);
-    dispatch(setQuery(templates[logFormat].query));
-    dispatch(setLogs(templates[logFormat].logs));
-  }, [logFormat, templates]);
+    const urlParams = new URLSearchParams(window.location.search);
+    const formatLogs = urlParams.get('logfmt');
+    const logs = urlParams.get('logs');
+    const query = urlParams.get('query');
 
+    if (logs && query) {
+      setTextAreaLogs(logs);
 
+      const prefix = '{job="analyze"}';
+      const newQuery = `${prefix}${query}`;
+      dispatch(setLogs(logs));
+      dispatch(setQuery(query));
 
-  const apiClient = new ApiClient()
+      const apiClient = new ApiClient();
+      apiClient
+        .executeQuery(logs, newQuery)
+        .then((response) => {
+          dispatch(setResultQuery(response));
+        })
+        .catch((error) => {
+          console.error('An error occurred:', error);
+        });
+    } else {
+      setTextAreaLogs(templates[logFormat].logs);
+      dispatch(setQuery(templates[logFormat].query));
+      dispatch(setLogs(templates[logFormat].logs));
+    }
 
-  const handleChangeFormat = async (event: ChangeEvent<HTMLInputElement>) => {
-    const format = event.target.value;
-    setLogFormat(format);
-    dispatch(setLogFormat(format));
-    
+    if (formatLogs && logs === templates[formatLogs].logs && query === templates[formatLogs].query) {
+      dispatch(setLogFormat(formatLogs));
+
+      const currentUrl = window.location.origin + window.location.pathname;
+      const updatedUrl = `${currentUrl}?logfmt=${encodeURIComponent(
+        formatLogs
+      )}&logs=${encodeURIComponent(logs)}&query=${encodeURIComponent(query)}`;
+
+      window.history.pushState({ path: updatedUrl }, '', updatedUrl);
+    }
+  }, [logFormat, templates, dispatch]);
+
+  const apiClient = new ApiClient();
+
+  const handleChangeFormat = async (format: string) => {
     const logs = templates[format].logs;
     const query = templates[format].query;
-  
+    const prefix = '{job="analyze"}';
+    const newQuery = `${prefix}${query}`;
+    const logFormatToSet = encodeURIComponent(format);
+
+    const currentUrl = window.location.origin + window.location.pathname;
+    const updatedUrl = `${currentUrl}?logfmt=${logFormatToSet}&logs=${encodeURIComponent(
+      logs
+    )}&query=${encodeURIComponent(query)}`;
+
+    window.history.pushState({ path: updatedUrl }, '', updatedUrl);
+
+    dispatch(setLogFormat(format));
+
     try {
       await dispatch(setLogs(logs));
       await dispatch(setQuery(query));
-      
-      const prefix = '{job="analyze"}';
-      const newQuery = `${prefix}${query}`;
-      const response: ResultQueryState['response'] = await apiClient.executeQuery(logs, newQuery);
+
+      const response: ResultQueryState['response'] =
+        await apiClient.executeQuery(logs, newQuery);
       dispatch(setResultQuery(response));
     } catch (error) {
       console.error('An error occurred:', error);
     }
   };
-  
+  const handleLogsChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const newLogs = event.target.value;
+    setTextAreaLogs(newLogs);
 
-  const selectedLogs = templates[logFormat].logs;
+    dispatch(setLogs(newLogs));
+  };
+
+  const logFormatSelected = useSelector(
+    (state: RootState) => state.logsFormat.logsFormat
+  );
+  const selectedLogs = useSelector((state: RootState) => state.logsFormat.logs);
+  const selectedQuery = useSelector((state: RootState) => state.query.query);
 
   async function handleClickShare() {
-    let currentUrl = window.location.href;
-    currentUrl += encodeURIComponent(selectedLogs);
+    let currentUrl = window.location.origin + window.location.pathname;
+
+    const logFormat = encodeURIComponent(logFormatSelected);
+    const logs = encodeURIComponent(selectedLogs);
+    const query = encodeURIComponent(selectedQuery);
+
+    currentUrl += `?logfmt=${logFormat}&logs=${logs}&query=${query}`;
+
     await navigator.clipboard.writeText(currentUrl);
     setcopySuccess(true);
 
@@ -106,7 +161,7 @@ export default function LogsSource() {
                 type="radio"
                 value={format}
                 checked={logFormat === format}
-                onChange={handleChangeFormat}
+                onChange={() => handleChangeFormat(format)}
                 name="logFormat"
                 id={format}
               />
@@ -146,7 +201,7 @@ export default function LogsSource() {
           name="logs-source__input"
           id="logs-source-input"
           value={textAreaLogs}
-          onChange={(e) => setTextAreaLogs(e.target.value)}
+          onChange={handleLogsChange}
         ></textarea>
       </div>
     </section>
