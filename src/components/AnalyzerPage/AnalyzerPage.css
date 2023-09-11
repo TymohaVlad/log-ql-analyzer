@@ -24,7 +24,7 @@ li{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: 80%;
+    max-width: 90%;
     margin: auto;
   }
   .form__list {
@@ -116,5 +116,6 @@ li{
  }
  .copy__link-message{
   color: #09b309;
-  font-size: 22px;
+  font-size: 18px;
+  font-weight: 600;
  }
