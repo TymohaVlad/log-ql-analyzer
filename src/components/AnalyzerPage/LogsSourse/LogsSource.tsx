@@ -28,9 +28,7 @@ type LogFormatTemplates = {
 
 export default function LogsSource() {
   const dispatch = useDispatch();
-  const logFormat = useSelector(
-    (state: RootState) => state.logsFormat.logsFormat
-  );
+  const logFormat = useSelector((state: RootState) => state.logsFormat.logsFormat);
   const [copySuccess, setcopySuccess] = useState<boolean>(false);
 
   const [templates] = useState<LogFormatTemplates>({
@@ -48,12 +46,14 @@ export default function LogsSource() {
     },
   });
   const [textAreaLogs, setTextAreaLogs] = useState('');
+  
+  
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const formatLogs = urlParams.get('logfmt');
     const logs = urlParams.get('logs');
     const query = urlParams.get('query');
-
+    
+    
     if (logs && query) {
       setTextAreaLogs(logs);
 
@@ -72,26 +72,20 @@ export default function LogsSource() {
           console.error('An error occurred:', error);
         });
     } else {
+      setSelectedFormat(null);
       setTextAreaLogs(templates[logFormat].logs);
       dispatch(setQuery(templates[logFormat].query));
       dispatch(setLogs(templates[logFormat].logs));
     }
 
-    if (formatLogs && logs === templates[formatLogs].logs && query === templates[formatLogs].query) {
-      dispatch(setLogFormat(formatLogs));
-
-      const currentUrl = window.location.origin + window.location.pathname;
-      const updatedUrl = `${currentUrl}?logfmt=${encodeURIComponent(
-        formatLogs
-      )}&logs=${encodeURIComponent(logs)}&query=${encodeURIComponent(query)}`;
-
-      window.history.pushState({ path: updatedUrl }, '', updatedUrl);
-    }
+  
   }, [logFormat, templates, dispatch]);
 
   const apiClient = new ApiClient();
+  const [selectedFormat, setSelectedFormat] = useState<string | null>(null);
 
   const handleChangeFormat = async (format: string) => {
+    setSelectedFormat(format)
     const logs = templates[format].logs;
     const query = templates[format].query;
     const prefix = '{job="analyze"}';
@@ -125,20 +119,16 @@ export default function LogsSource() {
     dispatch(setLogs(newLogs));
   };
 
-  const logFormatSelected = useSelector(
-    (state: RootState) => state.logsFormat.logsFormat
-  );
   const selectedLogs = useSelector((state: RootState) => state.logsFormat.logs);
   const selectedQuery = useSelector((state: RootState) => state.query.query);
-
+  
   async function handleClickShare() {
     let currentUrl = window.location.origin + window.location.pathname;
-
-    const logFormat = encodeURIComponent(logFormatSelected);
+    
     const logs = encodeURIComponent(selectedLogs);
     const query = encodeURIComponent(selectedQuery);
 
-    currentUrl += `?logfmt=${logFormat}&logs=${logs}&query=${query}`;
+    currentUrl += `?logs=${logs}&query=${query}`;
 
     await navigator.clipboard.writeText(currentUrl);
     setcopySuccess(true);
@@ -160,7 +150,7 @@ export default function LogsSource() {
                 className={`${format} radio`}
                 type="radio"
                 value={format}
-                checked={logFormat === format}
+                checked={selectedFormat === format }
                 onChange={() => handleChangeFormat(format)}
                 name="logFormat"
                 id={format}
@@ -207,3 +197,7 @@ export default function LogsSource() {
     </section>
   );
 }
+
+
+
+
